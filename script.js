@@ -1,7 +1,6 @@
 // Month names
 const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ];
 
 // In-memory data storage with prefilled sample data
@@ -16,6 +15,7 @@ let chartInstance = null;
 window.onload = function () {
     initializeMonthInputs();
     setupTabNavigation();
+    setupDownloadChart();
 };
 
 // Create input fields for all 12 months
@@ -139,4 +139,31 @@ function renderChart() {
             }
         }
     });
+}
+
+// Setup download chart button
+function setupDownloadChart() {
+    const downloadButton = document.getElementById('downloadChart');
+    downloadButton.addEventListener('click', downloadChart);
+}
+
+// Download chart as PNG
+function downloadChart() {
+    const canvas = document.getElementById('incomeExpenseChart');
+    
+    if (!canvas || !chartInstance) {
+        alert('Please render the chart first by visiting the Chart tab');
+        return;
+    }
+
+    // Convert canvas to image data URL
+    const image = canvas.toDataURL('image/png');
+
+    // Create a temporary link element and trigger download
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = `income-expense-chart-${new Date().toISOString().split('T')[0]}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
